@@ -11,13 +11,6 @@ Dynamixel Dxl(1); //Dynamixel on Serial1(USART1)
 
 bool onlyOnceHappened;
 
-void blinkOnce()
-{
-  digitalWrite(BOARD_LED_PIN, LOW);
-  delay_us(100);
-  digitalWrite(BOARD_LED_PIN, HIGH);
-}
-
 void setup()
 {  
   pinMode(BOARD_LED_PIN, OUTPUT);
@@ -40,34 +33,21 @@ void loop()
 
   if (onlyOnceHappened==false)
   {    
-    blinkOnce();
     onlyOnceHappened=true;
     delay (3000); //Some time to the user to activate the monitor/console
     SerialUSB.println ("v1.1.1 Orders receiver started");  
-    Serial2.begin(57600);
-    Serial2.println("v1.1.1 Orders receiver started BT");  
   }    
 
   if (SerialUSB.available())
   {
     aUint8=SerialUSB.read();
-    SerialUSB.print("read : ");
-    SerialUSB.println(aUint8);
-    blinkOnce();
     Dxl.writeRaw(aUint8);
-    //    delay(20);
-    Serial2.print("From USB : ");
-    Serial2.println(aUint8, HEX);
   }   
 
   if (Dxl.available())
   {
     aByte=Dxl.readRaw();
-    blinkOnce();
     SerialUSB.write(aByte);
-    //    delay(20);
-    Serial2.print("From Dynamixel : ");
-    Serial2.println(aByte, HEX);
   } 
 }
 
